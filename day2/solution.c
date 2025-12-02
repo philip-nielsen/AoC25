@@ -34,7 +34,31 @@ int numberOfDigits(unsigned long long n) {
     else return 1 + numberOfDigits(n/10);
 }
 
-unsigned long long solution(range* data) {
+unsigned long long day1(range* data) {
+    unsigned long long r = 0;
+    int k = 0;
+    for (int i = 0; i < numberOfRanges; i++) {
+        for (unsigned long long j = data[i].low; j <= data[i].high; j++) {
+            int n = numberOfDigits(j);
+            if (n % 2 == 1) continue;
+            
+            char str[n+2];
+            sprintf(str, "%llu", j); 
+            
+            k = 0;
+            while((int) (str[k] ^ str[(n/2)+k]) == 0) {
+                k++;
+                if(k == n/2) {
+                    r += j;
+                    break;
+                }
+            }
+        }
+    }
+    return r;
+}
+
+unsigned long long day2(range* data) {
     unsigned long long r = 0;
     int k = 0;
     for (int i = 0; i < numberOfRanges; i++) {
@@ -63,8 +87,10 @@ int main() {
     if (data == NULL) return 1;
 
     parseData(data);
-    unsigned long long result = solution(data);
-    printf("day1 = %llu\n", result);
+    unsigned long long day1_result = day1(data);
+    unsigned long long day2_result = day2(data);
+    printf("day1 = %llu\n", day1);
+    printf("day2 = %llu\n", day2);
     free(data);
     return 0;
 }
