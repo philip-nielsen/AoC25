@@ -45,12 +45,20 @@ int day1(int **data) {
 
 int findLowestIndex(int* array) {
     int index = 0;
+    int n1 = array[0];
+    int n2 = 0;
+    for (int i = 1; i < sizeOfNumber; i++) {
+        n2 = array[i];
+        if (n2 < n1 && n2 != -1) {
+            n1 = n2;
+            index = i;
+        }
+    }
     return index;
 }
 
 unsigned long long day2(int **data) {
     unsigned long long r = 0;
-    int cnt = 0;
     int lowestValue = 0;
     int lowestValueIndex = 0;
     for (int i = 0; i < numberOfNumbers; i++) {
@@ -61,9 +69,29 @@ unsigned long long day2(int **data) {
         numArray[1] = n2;
         for(int j = 2; j < sizeOfNumber; j++) {
             int tmp = data[i][j];
+            if(j >= 12) {
+                int index = findLowestIndex(numArray); 
+                printf("index = %d\n", index);
+                if(numArray[index] <= tmp) {
+                    numArray[index] = -1;
+                    numArray[j+1] = tmp;
+                }
+            } else {
+                numArray[j] = tmp;
+            }
         }
-        // printf("n1 = %d, n2 = %d\n",n1,n2); 
-        r += n1*10 + n2;
+
+        unsigned long long tmpr;
+        for(int j = 0; j < sizeOfNumber; j++) {
+            if(numArray[j] != -1) {
+                tmpr = tmpr*10 + numArray[j];
+            }
+            printf("%d", numArray[j]);
+        }
+        printf("\n");
+        // r += tmpr;
+        // printf("tmpr %llu\n",tmpr); 
+        
     }
     return r;
 }
@@ -76,6 +104,5 @@ int main() {
 
     parseData(data);
     printf("day1 = %d\n",day1(data));
-    printf("numberOfnumbers = %d\n", numberOfNumbers);
-    printf("numberOfdigits = %d\n", sizeOfNumber);
+    printf("day2 = %llu\n",day2(data));
 }
